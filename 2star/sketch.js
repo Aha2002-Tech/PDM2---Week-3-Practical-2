@@ -18,14 +18,56 @@ function setup() {
 function draw() {
     background(255);
     drawStart();
-    // thePlayer.draw();
-    // thePlayer.move();
-    // drawWin();
-    // drawDied();
+    thePlayer.draw();
+    thePlayer.move();
+    drawWin();
+    drawDied();
+            switch(state) {
+        case START:
+            drawStart();
+            break;
+        case PLAYING:
+            thePlayer.move();
+            thePlayer.draw();
+            break;
+        case WIN:
+            drawWin();
+            break;
+        case DIED:
+            drawDied();
+            break;
+    }
 }
+class Player {
+    constructor() {
+        this.x = 400;
+        this.y = 300;
+        this.xSpeed = 0;
+        this.size = 20;
+    }
+    move() {
+        this.x += this.xSpeed;
+        
+        this.x = constrain(this.x, 0, width);
+    }
+    draw() {
+        fill(0, 0, 255); 
+        ellipse(this.x, this.y, this.size);
+    }
+    setXSpeed(s) {
+        this.xSpeed = s;
+    }
+    
+    reset() {
+        this.x = 400;
+        this.y = 300;
+    }         
 
+}
 function keyPressed() {
+
     switch(keyCode) {
+
         case LEFT_ARROW:
             thePlayer.setXSpeed(-5);
             break;
@@ -36,7 +78,43 @@ function keyPressed() {
             console.log("Enter pressed");
             break;
     }
+const Start = 'a';
+const Win = 'w';
+const Died = 's';
+    switch (state){
+        case START:
+            console.log("starting game");
+            break;
+            case WIN: 
+            console.log("you win");
+            break;
+            case DIED:
+            console.log("you died");
+            break;  
+        
+    }
 }
+function keyPressed() {
+    if (keyCode === ENTER) {
+        if (state === START || state === WIN || state === DIED) {
+            thePlayer.reset();
+            state = PLAYING; 
+        }
+    }
+
+    
+    if (state === PLAYING) {
+        switch(keyCode) {
+            case LEFT_ARROW:
+                thePlayer.setXSpeed(-5);
+                break;
+            case RIGHT_ARROW:
+                thePlayer.setXSpeed(5);
+                break;
+        }
+    }
+}
+
 
 
 function keyReleased() {
@@ -45,6 +123,8 @@ function keyReleased() {
         case RIGHT_ARROW:
             thePlayer.setXSpeed(0);
             break;
+            default:
+            console.log("unknown key released: " + key);
     }
 }
 
